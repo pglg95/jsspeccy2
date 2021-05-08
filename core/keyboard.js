@@ -1,7 +1,7 @@
 JSSpeccy.Keyboard = function() {
 	var self = {};
 	self.active = true;
-	
+
 	var keyStates = [];
 	for (var row = 0; row < 8; row++) {
 		keyStates[row] = 0xff;
@@ -99,9 +99,11 @@ JSSpeccy.Keyboard = function() {
 		return result;
 	}
 	
-	document.onkeydown = keyDown;
-	document.onkeyup = keyUp;
-	document.onkeypress = keyPress;
+	JSSpeccy.VirtualKeyboard({
+		onkeydown: keyDown,
+		onkeyup: keyUp,
+		onkeypress: keyPress
+	})
 	
 	return self;
 }

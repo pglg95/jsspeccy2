@@ -1,13 +1,13 @@
 JSSpeccy.UI = function(opts) {
 	var self = {};
 
-	var container = opts.container;
-	if (typeof(container) === 'string') {
-		container = document.getElementById(container);
-	}
+	var container = opts.container; //DIV
+	//if (typeof(container) === 'string') {
+	//	container = document.getElementById(container);
+	//}
 	var controller = opts.controller;
 
-	var setInnerText;
+	/*var setInnerText;
 	if (document.getElementsByTagName("body")[0].innerText !== undefined) {
 		setInnerText = function (elem, text) {
 			elem.innerText = text;
@@ -18,11 +18,11 @@ JSSpeccy.UI = function(opts) {
 		};
 	}
 
-	$(container).addClass('jsspeccy');
+	$(container).addClass('jsspeccy'); */
 
 
 	/* Set up toolbar */
-	var toolbar = $('.toolbar', container);
+	/*var toolbar = $('.toolbar', container);
 
 	var stopStartButton = $('button.stop-start', toolbar);
 	stopStartButton.click(function() {
@@ -31,8 +31,18 @@ JSSpeccy.UI = function(opts) {
 		} else {
 			controller.start();
 		}
-	});
-	function refreshStopStartButton() {
+	});*/
+
+	function stopStartButtonClick() { 
+		if (controller.isRunning) {
+			controller.stop();
+		} else {
+			controller.start();
+		}
+	}
+
+
+	/*function refreshStopStartButton() {
 		if (controller.isRunning) {
 			stopStartButton.removeClass('start').addClass('stop');
 		} else {
@@ -41,31 +51,39 @@ JSSpeccy.UI = function(opts) {
 	}
 	controller.onStart.bind(refreshStopStartButton);
 	controller.onStop.bind(refreshStopStartButton);
-	refreshStopStartButton();
+	refreshStopStartButton(); */
 
-	$('button.reset', toolbar).click(function() {
+	function resetButtonClick() {
 		controller.reset();
-	});
+	}
 
-	var audioButton = $('button.audio', toolbar);
+	/*var audioButton = $('button.audio', toolbar);
 	audioButton.click(function() {
 		controller.setAudioState(!controller.getAudioState());
-	});
-	function refreshAudioButton(audioState) {
+	}); */
+	/*function refreshAudioButton(audioState) {
 		audioButton.toggleClass('enabled', audioState);
 	}
 	controller.onChangeAudioState.bind(refreshAudioButton);
-	refreshAudioButton(controller.getAudioState());
+	refreshAudioButton(controller.getAudioState()); */
 
-	$('button.open', toolbar).click(function() {
+	/*$('button.open', toolbar).click(function() {
 		showPanel('.open-file');
 	});
 
 	$('button.about', toolbar).click(function() {
 		showPanel('.about');
-	});
+	});*/
 
-	var selectModel = $('select.select-model', toolbar);
+	function getSpectrumModels(){
+		return JSSpeccy.Spectrum.MODELS
+	}
+
+	function changeModelButtonClick(){
+		controller.setModel(null);
+	}
+
+	/*var selectModel = $('select.select-model', toolbar);
 	var modelsById = {};
 	for (var i = 0; i < JSSpeccy.Spectrum.MODELS.length; i++) {
 		var model = JSSpeccy.Spectrum.MODELS[i];
@@ -82,9 +100,9 @@ JSSpeccy.UI = function(opts) {
 		selectModel.val(controller.getModel().id);
 	}
 	refreshModel();
-	controller.onChangeModel.bind(refreshModel);
+	controller.onChangeModel.bind(refreshModel); */
 
-	var autoloadTapes = $('input.autoload-tapes');
+	/*var autoloadTapes = $('input.autoload-tapes');
 
 
 	var checkerboardFilterCheckbox = $('input.checkerboard-filter');
@@ -103,16 +121,27 @@ JSSpeccy.UI = function(opts) {
 		controller.settings.checkerboardFilter.set(
 			checkerboardFilterCheckbox.is(':checked')
 		);
-	});
+	}); */
 
+	function checkerboardCheckboxChange(){
+		controller.settings.checkerboardFilter.set(true);
+	}
+
+	function onHidePanel(){
+		controller.activateKeyboard();
+	}
+
+	function onShowPanel(){
+		controller.deactivateKeyboard();
+	}
 
 	/* Set up panels */
-	var panels = [];
+	/*var panels = [];
 
 	function showPanel(selector) {
 		$('.panel', container).not(selector).hide();
 		$('.panel', container).filter(selector).show();
-		controller.deactivateKeyboard();
+		
 	}
 
 	function hidePanels() {
@@ -122,9 +151,14 @@ JSSpeccy.UI = function(opts) {
 
 	$('.panel button.close', container).click(function() {
 		hidePanels();
-	});
+	}); */
 
-	var openFilePanel = $('.panel.open-file', container);
+	function localFileInputChanged(){
+		controller.loadLocalFile(this.files[0], {'autoload': autoloadTapes.is(':checked')});
+		onHidePanel();
+	}
+
+	/*var openFilePanel = $('.panel.open-file', container);
 
 	var fileSelect = openFilePanel.find('input[type="file"]');
 	fileSelect.change(function() {
@@ -140,12 +174,12 @@ JSSpeccy.UI = function(opts) {
 			controller.loadFromUrl(url, {'autoload': autoloadTapes.is(':checked')});
 			hidePanels();
 		}
-	});
+	});*/
 
 
 	/* World Of Spectrum search interface */
 
-	var wosSearch = openFilePanel.find('form.search-wos');
+	/*var wosSearch = openFilePanel.find('form.search-wos');
 	var wosSearchField = wosSearch.find('input[type="search"]');
 	var wosSearchBtn = wosSearch.find('input[type="submit"]');
 
@@ -239,5 +273,6 @@ JSSpeccy.UI = function(opts) {
 	wosOpen.click(loadSelectedFile);
 	wosDownloads.dblclick(loadSelectedFile);
 
-	return self;
+	return self; */
 };
+

@@ -1,16 +1,16 @@
 JSSpeccy.Viewport = function(opts) {
 	var self = {};
-	var container = opts.container;
+//	var container = opts.container;
 	var scaleFactor = opts.scaleFactor || 2;
 
-	var positioner = document.createElement('div');
-	container.appendChild(positioner);
-	positioner.style.position = 'relative';
+//	var positioner = document.createElement('div');
+//	container.appendChild(positioner);
+//	positioner.style.position = 'relative';
 
-	self.canvas = document.createElement('canvas');
-	positioner.appendChild(self.canvas);
+	self.canvas = JSSpeccy.VirtualCanva();
+	//positioner.appendChild(self.canvas);
 
-	var statusIcon = document.createElement('div');
+	/*var statusIcon = document.createElement('div');
 	positioner.appendChild(statusIcon);
 	statusIcon.style.position = 'absolute';
 	statusIcon.style.width = '64px';
@@ -20,9 +20,9 @@ JSSpeccy.Viewport = function(opts) {
 	statusIcon.style.backgroundPosition = 'center';
 	statusIcon.style.backgroundRepeat = 'no-repeat';
 	statusIcon.style.display = 'none';
-	statusIcon.style.cursor = 'inherit';
+	statusIcon.style.cursor = 'inherit';*/
 
-	var currentIcon = 'none';
+	/*var currentIcon = 'none';
 	self.showIcon = function(icon) {
 		switch (icon) {
 			case 'loading':
@@ -38,21 +38,21 @@ JSSpeccy.Viewport = function(opts) {
 			default:
 				statusIcon.style.display = 'none';
 		}
-	};
+	};*/
 	if (opts.onClickIcon) {
 		statusIcon.onclick = opts.onClickIcon;
 	}
 
 	self.setResolution = function(width, height) {
-		container.style.width = width * scaleFactor + 'px';
+		//container.style.width = width * scaleFactor + 'px';
 		
-		self.canvas.width = width;
-		self.canvas.height = height;
+		self.canvas.setWidth(width);
+		self.canvas.setHeight(height);
 		
-		self.canvas.style.width = width * scaleFactor + 'px';
-		self.canvas.style.height = height * scaleFactor + 'px';
-		statusIcon.style.top = (height * scaleFactor / 2 - 32) + 'px';
-		statusIcon.style.left = (width * scaleFactor / 2 - 32) + 'px';
+		//self.canvas.style.width = width * scaleFactor + 'px';
+		//self.canvas.style.height = height * scaleFactor + 'px';
+		//statusIcon.style.top = (height * scaleFactor / 2 - 32) + 'px';
+		//statusIcon.style.left = (width * scaleFactor / 2 - 32) + 'px';
 	};
 
 	return self;

@@ -4,7 +4,7 @@ JSSpeccy.IOBus = function(opts) {
 	var keyboard = opts.keyboard;
 	var display = opts.display;
 	var memory = opts.memory;
-	var sound = opts.sound;
+	//var sound = opts.sound;
 	var contentionTable = opts.contentionTable;
 	var contentionTableLength = contentionTable.length;
 	
@@ -13,7 +13,8 @@ JSSpeccy.IOBus = function(opts) {
 			return keyboard.poll(addr);
 		} else if ((addr & 0xc002) == 0xc000) {
 			/* AY chip */
-			return sound.readSoundRegister();
+			//return sound.readSoundRegister();
+			return 0;
 		} else if ((addr & 0x00e0) === 0x0000) {
 			/* kempston joystick */
 			return 0;
@@ -25,7 +26,7 @@ JSSpeccy.IOBus = function(opts) {
 		if (!(addr & 0x01)) {
 			display.setBorder(val & 0x07);
 
-			sound.updateBuzzer((val & 16) >> 4, tstates);
+			//sound.updateBuzzer((val & 16) >> 4, tstates);
 		}
 		if (!(addr & 0x8002)) {
 			memory.setPaging(val);
@@ -33,12 +34,12 @@ JSSpeccy.IOBus = function(opts) {
 		
 		if ((addr & 0xc002) == 0xc000) {
 			/* AY chip - register select */
-			sound.selectSoundRegister( val & 0xF );
+		//	sound.selectSoundRegister( val & 0xF );
 		}
 		
 		if ((addr & 0xc002) == 0x8000) {
 			/* AY chip - data write */
-			sound.writeSoundRegister(val, tstates);
+		//	sound.writeSoundRegister(val, tstates);
 		}
 		
 	};

@@ -1,6 +1,6 @@
 JSSpeccy.Memory = function(opts) {
 	var self = {};
-	var model = opts.model || JSSpeccy.Spectrum.MODEL_128K;
+	var model = opts.model || JSSpeccy.Spectrum.MODEL_48K;
 
 	var contentionTableLength = model.frameLength;
 
@@ -20,15 +20,16 @@ JSSpeccy.Memory = function(opts) {
 	}
 
 	var romPages = {
-		'48.rom': MemoryPage(JSSpeccy.roms['48.rom']),
-		'128-0.rom': MemoryPage(JSSpeccy.roms['128-0.rom']),
-		'128-1.rom': MemoryPage(JSSpeccy.roms['128-1.rom'])
+		'48.rom': MemoryPage(JSSpeccy.roms['48.rom'])//,
+		//'128-0.rom': MemoryPage(JSSpeccy.roms['128-0.rom']),
+		//'128-1.rom': MemoryPage(JSSpeccy.roms['128-1.rom'])
 	};
 
 	var scratch = MemoryPage();
 	
 	var readSlots = [
-		model === JSSpeccy.Spectrum.MODEL_48K ? romPages['48.rom'].memory : romPages['128-0.rom'].memory,
+		romPages['48.rom'].memory,
+		//model === JSSpeccy.Spectrum.MODEL_48K ? romPages['48.rom'].memory : romPages['128-0.rom'].memory,
 		ramPages[5].memory,
 		ramPages[2].memory,
 		ramPages[0].memory
@@ -71,7 +72,7 @@ JSSpeccy.Memory = function(opts) {
 	};
 
 	var pagingIsLocked = false;
-	if (model === JSSpeccy.Spectrum.MODEL_128K) {
+	/*if (model === JSSpeccy.Spectrum.MODEL_128K) {
 		self.setPaging = function(val) {
 			if (pagingIsLocked) return;
 			var highMemoryPage = ramPages[val & 0x07];
@@ -81,10 +82,10 @@ JSSpeccy.Memory = function(opts) {
 			screenPage = (val & 0x08) ? ramPages[7].memory : ramPages[5].memory;
 			pagingIsLocked = val & 0x20;
 		};
-	} else {
+	} else {*/
 		self.setPaging = function(val) {
 		};
-	}
+	//}
 	
 	self.loadFromSnapshot = function(snapshotPages) {
 		for (var p in snapshotPages) {

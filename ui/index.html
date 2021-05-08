@@ -79,15 +79,15 @@
 					'autostart': true,
 					'measurePerformance': true
 				});
-				JSSpeccy.UI({
+			/*	JSSpeccy.UI({
 					container: 'jsspeccy',
 					controller: jsspeccy
-				});
+				});*/
 				$('#example-games').change(function() {
 					var filename = $(this).val();
 					if (filename) {
 						jsspeccy.loadFromUrl(
-							'http://jsspeccy.zxdemo.org/games/' + filename,
+							'http://jsspeccy.zxdemo.org/games/ant_attack.z80' + filename,
 							{'autoload': true}
 						);
 					}

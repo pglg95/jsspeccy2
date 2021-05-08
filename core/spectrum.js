@@ -1,7 +1,7 @@
 JSSpeccy.Spectrum = function(opts) {
 	var self = {};
 
-	model = opts.model || JSSpeccy.Spectrum.MODEL_128K;
+	model = opts.model || JSSpeccy.Spectrum.MODEL_48K;
 
 	var viewport = opts.viewport;
 	var keyboard = opts.keyboard;
@@ -22,16 +22,16 @@ JSSpeccy.Spectrum = function(opts) {
 		}
 	});
 
-	var sound = JSSpeccy.SoundGenerator({
+	/*var sound = JSSpeccy.SoundGenerator({
 		model: model,
 		soundBackend: soundBackend
-	});
+	});*/
 
 	var ioBus = JSSpeccy.IOBus({
 		keyboard: keyboard,
 		display: display,
 		memory: memory,
-		sound: sound,
+		//sound: sound,
 		contentionTable: model.contentionTable
 	});
 
@@ -51,14 +51,14 @@ JSSpeccy.Spectrum = function(opts) {
 		}
 		processor.runFrame(model.frameLength);
 		display.endFrame();
-		sound.endFrame();
+		//sound.endFrame();
 		processor.setTstates(processor.getTstates() - model.frameLength);
 		startNextFrameWithInterrupt = true;
 	};
 	self.reset = function() {
 		processor.reset();
 		memory.reset();
-		sound.reset();
+		//sound.reset();
 	};
 
 	self.loadSnapshot = function(snapshot) {
@@ -158,7 +158,7 @@ JSSpeccy.Spectrum.MODEL_48K = {
 };
 JSSpeccy.buildContentionTables(JSSpeccy.Spectrum.MODEL_48K);
 
-JSSpeccy.Spectrum.MODEL_128K = {
+/*JSSpeccy.Spectrum.MODEL_128K = {
 	id: '128k',
 	name: 'Spectrum 128K',
 	tapeAutoloader: 'tape_128.z80',
@@ -168,9 +168,9 @@ JSSpeccy.Spectrum.MODEL_128K = {
 	clockSpeed: 3546900,
 	contentionPattern: [6,5,4,3,2,1,0,0]
 };
-JSSpeccy.buildContentionTables(JSSpeccy.Spectrum.MODEL_128K);
+JSSpeccy.buildContentionTables(JSSpeccy.Spectrum.MODEL_128K);*/
 
 JSSpeccy.Spectrum.MODELS = [
-	JSSpeccy.Spectrum.MODEL_48K,
-	JSSpeccy.Spectrum.MODEL_128K
+	JSSpeccy.Spectrum.MODEL_48K//,
+//	JSSpeccy.Spectrum.MODEL_128K
 ];

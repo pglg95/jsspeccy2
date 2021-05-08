@@ -14,20 +14,20 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-if (!window.DataView) window.DataView = jDataView;
+//if (!window.DataView) window.DataView = jDataView;
 
-function JSSpeccy(container, opts) {
+function JSSpeccy(opts) {
 	var self = {};
 
-	if (typeof(container) === 'string') {
+	/*if (typeof(container) === 'string') {
 		container = document.getElementById(container);
-	}
+	}*/
 	if (!opts) {
 		opts = {};
 	}
 
-	var originalDocumentTitle = document.title;
-
+//var originalDocumentTitle = document.title;
+	var virtual=JSSpeccy.Virtual();
 
 	/* == Z80 core == */
 	/* define a list of rules to be triggered when the Z80 executes an opcode at a specified address;
@@ -103,14 +103,13 @@ function JSSpeccy(container, opts) {
 
 	/* == Set up viewport == */
 	var viewport = JSSpeccy.Viewport({
-		container: container,
 		scaleFactor: opts.scaleFactor || 2,
 		onClickIcon: function() {self.start();}
 	});
 
-	if (!('dragToLoad' in opts) || opts['dragToLoad']) {
+	//if (!('dragToLoad' in opts) || opts['dragToLoad']) {
 		/* set up drag event on canvas to load files */
-		viewport.canvas.ondragenter = function() {
+	/*	viewport.canvas.ondragenter = function() {
 			// Needed for web browser compatibility
 			return false;
 		};
@@ -123,7 +122,7 @@ function JSSpeccy(container, opts) {
 			self.loadLocalFile(files[0]);
 			return false;
 		};
-	}
+	}*/
 
 	function updateViewportIcon() {
 		if (self.isDownloading) {
@@ -147,7 +146,7 @@ function JSSpeccy(container, opts) {
 
 
 	/* == Audio == */
-	var soundBackend = JSSpeccy.SoundBackend();
+	/*var soundBackend = JSSpeccy.SoundBackend();
 	self.onChangeAudioState = Event();
 	self.getAudioState = function() {
 		return soundBackend.isEnabled;
@@ -156,10 +155,10 @@ function JSSpeccy(container, opts) {
 		var originalState = soundBackend.isEnabled;
 		var newState = soundBackend.setAudioState(requestedState);
 		if (originalState != newState) self.onChangeAudioState.trigger(newState);
-	};
+	};*/
 
 	/* == Snapshot / Tape file handling == */
-	self.loadLocalFile = function(file, opts) {
+/*	self.loadLocalFile = function(file, opts) {
 		var reader = new FileReader();
 		self.isDownloading = true;
 		updateViewportIcon();
@@ -169,7 +168,7 @@ function JSSpeccy(container, opts) {
 			self.loadFile(file.name, this.result, opts);
 		};
 		reader.readAsArrayBuffer(file);
-	};
+	};*/
 	self.loadFromUrl = function(url, opts) {
 		var request = new XMLHttpRequest();
 
@@ -202,15 +201,18 @@ function JSSpeccy(container, opts) {
 		if (!opts) opts = {};
 
 		var fileType = 'unknown';
-		if (name && name.match(/\.sna(\.zip)?$/i)) {
+		/*if (name && name.match(/\.sna(\.zip)?$/i)) {
 			fileType = 'sna';
-		} else if (name && name.match(/\.tap(\.zip)?$/i)) {
+		} else */
+		if (name && name.match(/\.tap(\.zip)?$/i)) {
 			fileType = 'tap';
-		} else if (name && name.match(/\.tzx(\.zip)?$/i)) {
+		} else 
+		/*if (name && name.match(/\.tzx(\.zip)?$/i)) {
 			fileType = 'tzx';
-		} else if (name && name.match(/\.z80(\.zip)?$/i)) {
+		} else */if (name && name.match(/\.z80(\.zip)?$/i)) {
 			fileType = 'z80';
-		} else {
+		} 
+	/*	else {
 			var signatureBytes = new Uint8Array(data, 0, 8);
 			var signature = String.fromCharCode.apply(null, signatureBytes);
 			if (signature == "ZXTape!\x1A") {
@@ -220,21 +222,21 @@ function JSSpeccy(container, opts) {
 			} else if (JSSpeccy.TapFile.isValid(data)) {
 				fileType = 'tap';
 			}
-		}
+		}*/
 
 		switch (fileType) {
-			case 'sna':
+		/*	case 'sna':
 				loadSnapshot(JSSpeccy.SnaFile(data));
-				break;
+				break;*/
 			case 'z80':
 				loadSnapshot(JSSpeccy.Z80File(data));
 				break;
 			case 'tap':
 				loadTape(JSSpeccy.TapFile(data), opts);
 				break;
-			case 'tzx':
+			/*case 'tzx':
 				loadTape(JSSpeccy.TzxFile(data), opts);
-				break;
+				break;*/
 		}
 	};
 
@@ -290,14 +292,14 @@ function JSSpeccy(container, opts) {
 	function initReferenceTime() {
 		msPerFrame = (currentModel.frameLength * 1000) / currentModel.clockSpeed;
 		remainingMs = 0;
-		lastFrameStamp = performance.now();
+		lastFrameStamp = virtual.getCurrentTimestamp();
 	}
 
-	var PERFORMANCE_FRAME_COUNT = 10;  /* average over this many frames when measuring performance */
-	var performanceTotalMilliseconds = 0;
-	var performanceFrameNum = 0;
+	/*var PERFORMANCE_FRAME_COUNT = 10;  /* average over this many frames when measuring performance */
+	/*var performanceTotalMilliseconds = 0;
+	var performanceFrameNum = 0; */
 
-	var requestAnimationFrame = (
+	/*var requestAnimationFrame = (
 		window.requestAnimationFrame || window.msRequestAnimationFrame ||
 		window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame ||
 		window.oRequestAnimationFrame ||
@@ -306,27 +308,27 @@ function JSSpeccy(container, opts) {
 				callback(performance.now());
 			}, 10);
 		}
-	);
+	);*/
 
 	function tick() {
 		if (!self.isRunning) return;
 
-		stampBefore = performance.now();
-		var timeElapsed = stampBefore - lastFrameStamp;
+		stampBefore = virtual.getCurrentTimestamp();
+		//var timeElapsed = stampBefore - lastFrameStamp;
 		remainingMs += stampBefore - lastFrameStamp;
 		if (remainingMs > msPerFrame) {
 			/* run a frame of emulation */
 			spectrum.runFrame();
-			var stampAfter = performance.now();
+			//var stampAfter = performance.now();
 
-			if (opts.measurePerformance) {
+			/*if (opts.measurePerformance) {
 				performanceTotalMilliseconds += (stampAfter - stampBefore);
 				performanceFrameNum = (performanceFrameNum + 1) % PERFORMANCE_FRAME_COUNT;
 				if (performanceFrameNum === 0) {
 					document.title = originalDocumentTitle + ' ' + (performanceTotalMilliseconds / PERFORMANCE_FRAME_COUNT).toFixed(1) + " ms/frame; elapsed: " + timeElapsed;
 					performanceTotalMilliseconds = 0;
 				}
-			}
+			}*/
 
 			remainingMs -= msPerFrame;
 
@@ -342,7 +344,7 @@ function JSSpeccy(container, opts) {
 		}
 		lastFrameStamp = stampBefore;
 
-		requestAnimationFrame(tick);
+		virtual.requestAnimationFrame(tick);
 	}
 
 	self.onStart = Event();
@@ -354,7 +356,7 @@ function JSSpeccy(container, opts) {
 
 		initReferenceTime();
 
-		requestAnimationFrame(tick);
+		virtual.requestAnimationFrame(tick);
 	};
 	self.onStop = Event();
 	self.stop = function() {
@@ -368,7 +370,7 @@ function JSSpeccy(container, opts) {
 
 
 	/* == Startup conditions == */
-	self.setModel(JSSpeccy.Spectrum.MODEL_128K);
+	self.setModel(JSSpeccy.Spectrum.MODEL_48K);
 
 	if (opts.loadFile) {
 		self.loadFromUrl(opts.loadFile, {'autoload': opts.autoload});

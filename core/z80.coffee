@@ -17,7 +17,7 @@ of the host processor, as typed arrays are native-endian
 	http://cat-in-136.blogspot.com/2011/03/javascript-typed-array-use-native.html)
 ###
 
-window.JSSpeccy.buildZ80 = (opts) ->
+JSSpeccy.buildZ80 = (opts) ->
 	opts ?= {}
 	endianTestBuffer = new ArrayBuffer(2)
 	endianTestUint16 = new Uint16Array(endianTestBuffer)

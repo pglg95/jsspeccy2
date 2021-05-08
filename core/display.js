@@ -3,7 +3,7 @@ JSSpeccy.Display = function(opts) {
 	
 	var viewport = opts.viewport;
 	var memory = opts.memory;
-	var model = opts.model || JSSpeccy.Spectrum.MODEL_128K;
+	var model = opts.model || JSSpeccy.Spectrum.MODEL_48K;
 	var border = opts.borderEnabled;
 
 	var checkerboardFilterEnabled = opts.settings.checkerboardFilter.get();
@@ -60,14 +60,18 @@ JSSpeccy.Display = function(opts) {
 	var CANVAS_HEIGHT = 192 + (border ? (TOP_BORDER_LINES + BOTTOM_BORDER_LINES) : 0);
 	
 	viewport.setResolution(CANVAS_WIDTH, CANVAS_HEIGHT);
-	var ctx = viewport.canvas.getContext('2d');
-	var imageData = ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-	var pixels = new Int32Array(imageData.data.buffer);
+	//var ctx = viewport.canvas.getContext('2d');
+	//var imageData = ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+	//var pixels = new Int32Array(imageData.data.buffer);
+	var imageData = viewport.canvas.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+	var pixels = new Int32Array(imageData);
 
 	/* for post-processing */
-	var imageData2 = ctx.createImageData(imageData);
-	var pixels2 = new Int32Array(imageData2.data.buffer);
-	
+	//var imageData2 = ctx.createImageData(imageData);
+	var imageData2 = viewport.canvas.createImageData(CANVAS_WIDTH, CANVAS_HEIGHT);
+	//var pixels2 = new Int32Array(imageData2.data.buffer);
+	var pixels2 = new Int32Array(imageData2);
+
 	var borderColour = 7;
 	self.setBorder = function(val) {
 		borderColour = val;
@@ -158,7 +162,7 @@ JSSpeccy.Display = function(opts) {
 		if (checkerboardFilterEnabled) {
 			self.postProcess();
 		} else {
-			ctx.putImageData(imageData, 0, 0);
+			viewport.canvas.putImageData(imageData, 0, 0);
 		}
 	};
 
@@ -209,7 +213,7 @@ JSSpeccy.Display = function(opts) {
 			ofs += skip;
 			x = 0;
 		}
-		ctx.putImageData(imageData2, 0, 0);
+		viewport.canvas.putImageData(imageData2, 0, 0);
 	};
 
 	return self;
