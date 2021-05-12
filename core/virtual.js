@@ -15,4 +15,6 @@ JSSpeccy.Virtual = function(){
 			}, 3000);
 		}
 	);
+
+	return self;
 }

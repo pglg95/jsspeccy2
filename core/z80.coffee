@@ -17,7 +17,7 @@ of the host processor, as typed arrays are native-endian
 	http://cat-in-136.blogspot.com/2011/03/javascript-typed-array-use-native.html)
 ###
 
-JSSpeccy.buildZ80 = (opts) ->
+global.buildZ80 = (opts) ->
 	opts ?= {}
 	endianTestBuffer = new ArrayBuffer(2)
 	endianTestUint16 = new Uint16Array(endianTestBuffer)
@@ -2301,7 +2301,7 @@ JSSpeccy.buildZ80 = (opts) ->
 	scope, giving a significant speed boost
 	###
 	defineZ80JS = """
-		window.JSSpeccy.Z80 = function(opts) {
+		JSSpeccy.Z80 = function(opts) {
 			var self = {};
 
 			#{setUpStateJS}
@@ -2625,5 +2625,7 @@ JSSpeccy.buildZ80 = (opts) ->
 		defineZ80JS = defineZ80JS.replace(/CONTEND_PORT_LATE\((.*?)\)/g, 'tstates += 3');
 
 	# console.log(defineZ80JS);
-	indirectEval = eval
-	indirectEval(defineZ80JS);
+	#indirectEval = eval
+	#indirectEval(defineZ80JS);
+	global.code=defineZ80JS
+	"OK"

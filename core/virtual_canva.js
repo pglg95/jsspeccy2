@@ -21,7 +21,5 @@ JSSpeccy.VirtualCanva = function(opts){
         return console.log(imageData.toString());
     }
 
-
-    
-   
+    return self;
 }

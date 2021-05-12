@@ -1,19 +1,12 @@
 .PHONY: all
 
-#DIST_FILES=\
+DIST_FILES=\
 	build/jsspeccy-core.min.js \
-	lib/jdataview.js \
-	lib/jquery-1.7.2.min.js \
-	ui/index.html \
-	ui/ui.js \
-	ui/jsspeccy.css \
-	README \
-	Embedding.txt \
-	COPYING
+	ui/newui.js
 
-#all: $(DIST_FILES) ui/images/*
-#	mkdir -p dist
-#	cp -r $(DIST_FILES) ui/images dist
+all: $(DIST_FILES) ui/images/*
+	mkdir -p dist
+	cp -r $(DIST_FILES) ui/images dist
 
 build/roms.js: bin2js.pl roms/*
 	mkdir -p build
@@ -26,6 +19,10 @@ build/autoloaders.js: bin2js.pl autoloaders/*
 build/z80.js: core/z80.coffee
 	mkdir -p build
 	coffee -c -o build/ core/z80.coffee
+
+build/z80p.js: build/z80.js
+	cp core/z80_builder.js build/z80_builder.js
+	node build/z80_builder.js
 
 CORE_JS_FILES=\
 	core/virtual.js \
@@ -41,12 +38,12 @@ CORE_JS_FILES=\
 	core/spectrum.js \
 	core/tap_file.js \
 	core/viewport.js \
-	build/z80.js \
+	build/z80p.js \
 	core/z80_file.js
 
 build/jsspeccy-core.min.js: $(CORE_JS_FILES)
 	mkdir -p build
-	java -jar compiler.jar \
+	#java -jar compiler.jar \
 		--js=core/jsspeccy.js --js=core/display.js --js=core/io_bus.js --js=core/keyboard.js \
 		--js=core/memory.js --js=build/roms.js --js=build/autoloaders.js  --js=core/spectrum.js \
 		--js=core/tap_file.js --js=core/viewport.js --js=build/z80.js \
@@ -55,6 +52,14 @@ build/jsspeccy-core.min.js: $(CORE_JS_FILES)
 		--js=core/virtual_keyboard.js \
 		--js=core/virtual_canva.js \
 		--js_output_file=build/jsspeccy-core.min.js
+
+	cat	core/jsspeccy.js core/display.js core/io_bus.js core/keyboard.js \
+		core/memory.js build/roms.js build/autoloaders.js  core/spectrum.js \
+		core/tap_file.js core/viewport.js build/z80p.js \
+		core/z80_file.js \
+		core/virtual.js \
+		core/virtual_keyboard.js \
+		core/virtual_canva.js > build/jsspeccy-core.min.js
 
 .PHONY: clean
 clean:

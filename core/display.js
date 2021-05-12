@@ -63,12 +63,12 @@ JSSpeccy.Display = function(opts) {
 	//var ctx = viewport.canvas.getContext('2d');
 	//var imageData = ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 	//var pixels = new Int32Array(imageData.data.buffer);
-	var imageData = viewport.canvas.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+	var imageData = viewport.getCanvas().getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 	var pixels = new Int32Array(imageData);
 
 	/* for post-processing */
 	//var imageData2 = ctx.createImageData(imageData);
-	var imageData2 = viewport.canvas.createImageData(CANVAS_WIDTH, CANVAS_HEIGHT);
+	var imageData2 = viewport.getCanvas().createImageData(CANVAS_WIDTH, CANVAS_HEIGHT);
 	//var pixels2 = new Int32Array(imageData2.data.buffer);
 	var pixels2 = new Int32Array(imageData2);
 
@@ -162,7 +162,7 @@ JSSpeccy.Display = function(opts) {
 		if (checkerboardFilterEnabled) {
 			self.postProcess();
 		} else {
-			viewport.canvas.putImageData(imageData, 0, 0);
+			viewport.getCanvas().putImageData(imageData, 0, 0);
 		}
 	};
 
@@ -213,7 +213,7 @@ JSSpeccy.Display = function(opts) {
 			ofs += skip;
 			x = 0;
 		}
-		viewport.canvas.putImageData(imageData2, 0, 0);
+		viewport.getCanvas().putImageData(imageData2, 0, 0);
 	};
 
 	return self;

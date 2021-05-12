@@ -7,7 +7,7 @@ JSSpeccy.Viewport = function(opts) {
 //	container.appendChild(positioner);
 //	positioner.style.position = 'relative';
 
-	self.canvas = JSSpeccy.VirtualCanva();
+	var canvas = JSSpeccy.VirtualCanva();
 	//positioner.appendChild(self.canvas);
 
 	/*var statusIcon = document.createElement('div');
@@ -39,15 +39,19 @@ JSSpeccy.Viewport = function(opts) {
 				statusIcon.style.display = 'none';
 		}
 	};*/
-	if (opts.onClickIcon) {
+	/*if (opts.onClickIcon) {
 		statusIcon.onclick = opts.onClickIcon;
+	}*/
+
+	self.getCanvas=function(){
+		return canvas;
 	}
 
 	self.setResolution = function(width, height) {
 		//container.style.width = width * scaleFactor + 'px';
 		
-		self.canvas.setWidth(width);
-		self.canvas.setHeight(height);
+		canvas.setWidth(width);
+		canvas.setHeight(height);
 		
 		//self.canvas.style.width = width * scaleFactor + 'px';
 		//self.canvas.style.height = height * scaleFactor + 'px';
